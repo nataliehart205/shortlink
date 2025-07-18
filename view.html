@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <p>Redirecting...</p>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB21NEK9trmTATrcFT_REqM8B1KVwy5IMM",
+      authDomain: "shortlink-d23af.firebaseapp.com",
+      projectId: "shortlink-d23af",
+      storageBucket: "shortlink-d23af.firebasestorage.app",
+      messagingSenderId: "744023649783",
+      appId: "1:744023649783:web:063cc6e7be8ffbe9cd92f2",
+      measurementId: "G-WZDFZFM7K8",
+      databaseURL: "https://shortlink-d23af-default-rtdb.firebaseio.com"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("x");
+
+    db.ref("links/" + id).once("value")
+      .then(snapshot => {
+        const data = snapshot.val();
+        if (data && data.link) {
+          window.location.href = data.link;
+        } else {
+          document.body.innerHTML = "<h2>Invalid or missing link ID.</h2>";
+        }
+      })
+      .catch(err => {
+        document.body.innerHTML = "<h2>Error: " + err.message + "</h2>";
+      });
+  </script>
+</body>
+</html>
