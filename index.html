@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Short Link Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    #generatedLink {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Short Link Generator</h2>
+    <input id="title" placeholder="Title">
+    <input id="desc" placeholder="Description">
+    <input id="img" placeholder="Image URL">
+    <input id="link" placeholder="Original Link">
+    <button onclick="generate()">Generate Short Link</button>
+    <div id="generatedLink"></div>
+  </div>
+
+  <script>
+    function generateID(length = 6) {
+      return Math.random().toString(36).substr(2, length);
+    }
+
+    function generate() {
+      const title = document.getElementById('title').value;
+      const desc = document.getElementById('desc').value;
+      const img = document.getElementById('img').value;
+      const link = document.getElementById('link').value;
+      const id = generateID();
+
+      const newEntry = {
+        title: title,
+        desc: desc,
+        img: img,
+        link: link
+      };
+
+      // Save locally for demo; on real site this would go to server
+      let links = JSON.parse(localStorage.getItem("shortLinks") || "{}");
+      links[id] = newEntry;
+      localStorage.setItem("shortLinks", JSON.stringify(links));
+
+      const shortURL = `view.html?x=${id}`;
+      document.getElementById("generatedLink").innerHTML =
+        `🔗 <a href="${shortURL}" target="_blank">${shortURL}</a>`;
+    }
+  </script>
+</body>
+</html>
