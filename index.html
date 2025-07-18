@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shortlink Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, textarea { display: block; margin-bottom: 10px; width: 100%; padding: 10px; }
+    button { padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h2>Create a Shortlink</h2>
+  <input type="text" id="id" placeholder="Short ID (e.g. xvq20f)" required />
+  <input type="text" id="title" placeholder="Title" required />
+  <input type="text" id="desc" placeholder="Description" required />
+  <input type="text" id="img" placeholder="Image URL" required />
+  <input type="text" id="link" placeholder="Destination URL" required />
+  <button onclick="saveData()">Generate</button>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB21NEK9trmTATrcFT_REqM8B1KVwy5IMM",
+      authDomain: "shortlink-d23af.firebaseapp.com",
+      databaseURL: "https://shortlink-d23af-default-rtdb.firebaseio.com",
+      projectId: "shortlink-d23af",
+      storageBucket: "shortlink-d23af.appspot.com",
+      messagingSenderId: "744023649783",
+      appId: "1:744023649783:web:063cc6e7be8ffbe9cd92f2",
+      measurementId: "G-WZDFZFM7K8"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function saveData() {
+      const id = document.getElementById("id").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const desc = document.getElementById("desc").value.trim();
+      const img = document.getElementById("img").value.trim();
+      const link = document.getElementById("link").value.trim();
+
+      if (!id || !title || !desc || !img || !link) return alert("Please fill in all fields.");
+
+      db.ref("links/" + id).set({ title, desc, img, link })
+        .then(() => alert("Shortlink saved successfully!"))
+        .catch(error => alert("Error: " + error.message));
+    }
+  </script>
+</body>
+</html>
